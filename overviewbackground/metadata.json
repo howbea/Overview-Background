@@ -1,8 +1,0 @@
-{
-  "name": "Overview background",
-  "description": "Add background in overview",
-  "uuid": "overviewbackground",
-  "shell-version": [
-    "43"
-  ]
-}
