@@ -1,0 +1,11 @@
+{
+  "name": "Overview background",
+  "description": "Add background in overview",
+  "uuid": "overviewbackground@github.com.orbitcorrection",
+  "shell-version": [
+    "40",
+    "41",
+    "42",
+    "43"
+  ]
+}
