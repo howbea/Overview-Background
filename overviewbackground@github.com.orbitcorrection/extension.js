@@ -25,7 +25,7 @@ const Background = imports.ui.background;
 const Layout = imports.ui.layout;
 const Main = imports.ui.main;
 
-const BLUR_BRIGHTNESS = 0.65;
+const BLUR_BRIGHTNESS = 0.62;
 const BLUR_SIGMA = 60;
 
 class Extension {
