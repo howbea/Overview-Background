@@ -4,12 +4,9 @@
   "name": "Overview Background",
   "shell-version": [
     "40",
-    "41",
-    "42",
-    "43",
-    "44"
+    "41"
   ],
   "url": "https://github.com/orbitcorrecton/overview-background",
   "uuid": "overviewbackground@github.com.orbitcorrection",
-  "version": 5
+  "version": 7
 }
