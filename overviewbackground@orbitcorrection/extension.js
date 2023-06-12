@@ -108,6 +108,7 @@ class Extension {
     disable() {
         this._backgroundGroup.destroy();
         this._backgroundGroup = null;
+        this._onDestroy();
     }
 }
 
