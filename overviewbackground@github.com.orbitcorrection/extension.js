@@ -16,19 +16,18 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-/* exported init */
-const {
-    Clutter, Shell, St,
-} = imports.gi;
+import Clutter from 'gi://Clutter';
+import St from 'gi://St';
+import Shell from 'gi://Shell';
 
-const Background = imports.ui.background;
-const Layout = imports.ui.layout;
-const Main = imports.ui.main;
+import * as Background from 'resource:///org/gnome/shell/ui/background.js';
+import * as Layout from 'resource:///org/gnome/shell/ui/layout.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 const BLUR_BRIGHTNESS = 0.60;
 const BLUR_SIGMA = 60;
 
-class Extension {
+class OvervievBackgroudExtension {
     constructor() {        
     }
 
@@ -107,6 +106,4 @@ class Extension {
     }
 }
 
-function init() {
-    return new Extension();
-}
+export default OvervievBackgroudExtension;
