@@ -3,11 +3,9 @@
   "description": "Add background in overview",
   "name": "Overview Background",
   "shell-version": [
-    "42",
-    "43",
-    "44"
+    "45"
   ],
   "url": "https://github.com/orbitcorrecton/overview-background",
   "uuid": "overviewbackground@github.com.orbitcorrection",
-  "version": 8
+  "version": 9
 }
