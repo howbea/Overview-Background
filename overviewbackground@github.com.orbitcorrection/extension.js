@@ -16,21 +16,17 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import Clutter from 'gi://Clutter';
-import St from 'gi://St';
-import Shell from 'gi://Shell';
+/* exported init */
+const {
+    Clutter, Shell, St,
+} = imports.gi;
 
-import * as Background from 'resource:///org/gnome/shell/ui/background.js';
-import * as Layout from 'resource:///org/gnome/shell/ui/layout.js';
-import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+const Background = imports.ui.background;
+const Layout = imports.ui.layout;
+const Main = imports.ui.main;
+const ExtensionUtils = imports.misc.extensionUtils;
 
-const BLUR_BRIGHTNESS = 0.60;
-const BLUR_SIGMA = 60;
-
-class OvervievBackgroudExtension {
-    constructor() {        
-    }
-
+class Extension {
     _createBackground(monitorIndex) {
         let monitor = Main.layoutManager.monitors[monitorIndex];
         let widget = new St.Widget({
@@ -54,6 +50,8 @@ class OvervievBackgroudExtension {
     }
 
     _updateBackgroundEffects() {
+        const BLUR_BRIGHTNESS = this._settings.get_int('blur-brightness')* 0.05;
+        const BLUR_SIGMA = this._settings.get_int('blur-sigma')* 5;
         const themeContext = St.ThemeContext.get_for_stage(global.stage);
         this._signalnotifyscalefactor = themeContext.connectObject('notify::scale-factor',
             () => this._updateBackgroundEffects(), this);
@@ -85,6 +83,10 @@ class OvervievBackgroudExtension {
 
 
     enable() {
+        this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.ob');
+        this._settingsChangeId = this._settings.connect("changed", () => {
+            this._updateBackgrounds();
+            });
         this._backgroundGroup = new Clutter.Actor();
         this._bgManagers = [];
         this._updateBackgrounds();
@@ -93,6 +95,11 @@ class OvervievBackgroudExtension {
     }
 
     disable() {
+        if (this._settingsChangeId){
+        this._settings.disconnect(this._settingsChangeId);
+        this._settingsChangeId = null;
+        }
+        this._settings = null;
         this._backgroundGroup.destroy();
         this._backgroundGroup = null;
         if (this._signalnotifyscalefactor) { 
@@ -106,4 +113,6 @@ class OvervievBackgroudExtension {
     }
 }
 
-export default OvervievBackgroudExtension;
+function init() {
+    return new Extension();
+}
