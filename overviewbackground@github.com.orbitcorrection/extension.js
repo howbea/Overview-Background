@@ -23,15 +23,12 @@ import Shell from 'gi://Shell';
 import * as Background from 'resource:///org/gnome/shell/ui/background.js';
 import * as Layout from 'resource:///org/gnome/shell/ui/layout.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-const BLUR_BRIGHTNESS = 0.60;
-const BLUR_SIGMA = 60;
-
-class OvervievBackgroudExtension {
-    constructor() {        
-    }
+export default class OvervievBackgroudExtension extends Extension {
 
     _createBackground(monitorIndex) {
+   
         let monitor = Main.layoutManager.monitors[monitorIndex];
         let widget = new St.Widget({
             style_class: 'ov-background',
@@ -54,6 +51,8 @@ class OvervievBackgroudExtension {
     }
 
     _updateBackgroundEffects() {
+        const BLUR_BRIGHTNESS = this._settings.get_int('blur-brightness')* 0.05;
+        const BLUR_SIGMA = this._settings.get_int('blur-sigma')* 5;
         const themeContext = St.ThemeContext.get_for_stage(global.stage);
         this._signalnotifyscalefactor = themeContext.connectObject('notify::scale-factor',
             () => this._updateBackgroundEffects(), this);
@@ -83,16 +82,23 @@ class OvervievBackgroudExtension {
             this._updateBackgrounds.bind(this), this);
     }
 
-
     enable() {
+        this._settings = this.getSettings();
         this._backgroundGroup = new Clutter.Actor();
         this._bgManagers = [];
         this._updateBackgrounds();
+        this._settingsChangeId = this._settings.connect("changed", () => {
+            this._updateBackgrounds();
+            });
 
         Main.layoutManager.overviewGroup.insert_child_at_index(this._backgroundGroup, 0);
     }
 
     disable() {
+        if (this._settingsChangeId)
+        this._settings.disconnect(this._settingsChangeId);
+        this._settingsChangeId = null;
+        this._settings = null;
         this._backgroundGroup.destroy();
         this._backgroundGroup = null;
         if (this._signalnotifyscalefactor) { 
@@ -105,5 +111,3 @@ class OvervievBackgroudExtension {
         }
     }
 }
-
-export default OvervievBackgroudExtension;

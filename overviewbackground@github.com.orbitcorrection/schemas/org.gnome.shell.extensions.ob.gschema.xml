@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.ob" path="/org/gnome/shell/extensions/ob/">
+    <key name="blur-brightness" type="i">
+      <default>13</default>
+    </key>
+    <key name="blur-sigma" type="i">
+      <default>9</default>
+    </key>
+  </schema>
+</schemalist>
