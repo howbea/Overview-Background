@@ -62,7 +62,7 @@ export default class OvervievBackgroudExtension extends Extension {
             if (effect) {
                 effect.set({
                     brightness: BLUR_BRIGHTNESS,
-                    sigma: BLUR_SIGMA * themeContext.scale_factor,
+                    radius: BLUR_SIGMA / themeContext.scale_factor,
                 });
             }
         }
@@ -99,15 +99,15 @@ export default class OvervievBackgroudExtension extends Extension {
         this._settings.disconnect(this._settingsChangeId);
         this._settingsChangeId = null;
         this._settings = null;
-        this._backgroundGroup.destroy();
-        this._backgroundGroup = null;
         if (this._signalnotifyscalefactor) { 
             themeContext.disconnectObject(this._signalnotifyscalefactor);
             this._signalnotifyscalefactor = null;
         }
-        if (this._signalmonitorchanged) {
+         if (this._signalmonitorchanged) {
             Main.layoutManager.disconnectObject(this._signalmonitorchanged);
             this._signalmonitorchanged = null;
         }
+        this._backgroundGroup.destroy();
+        this._backgroundGroup = null;       
     }
 }
