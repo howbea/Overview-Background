@@ -8,9 +8,10 @@
   "settings-schema": "org.gnome.shell.extensions.ob",
   "shell-version": [
     "46",
-    "47"
+    "47",
+    "48"
   ],
   "url": "https://github.com/howbea/overview-background",
   "uuid": "overviewbackground@github.com.orbitcorrection",
-  "version": 21
+  "version": 22
 }
