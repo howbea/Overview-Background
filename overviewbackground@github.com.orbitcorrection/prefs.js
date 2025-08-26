@@ -9,13 +9,13 @@ export default class OBPreferences extends ExtensionPreferences {
     
         const page = new Adw.PreferencesPage();
         const groupTarget = new Adw.PreferencesGroup({
-            title: "Intensity of blur",
-            description: "Set brightness and sigma",
+            title: "Blur Intensity",
+            description: "Adjusting brightness and radius",
         });
         page.add(groupTarget);
         
         const BlurBrightness = new Adw.ActionRow({
-            title: "Blur Brightness",
+            title: "Brightness",
         });
         groupTarget.add(BlurBrightness);
 
@@ -44,7 +44,7 @@ export default class OBPreferences extends ExtensionPreferences {
         BlurBrightness.activatable_widget = BlurBrightnessSpinButton;
 
         const BlurSigma = new Adw.ActionRow({
-            title: "Blur Sigma",
+            title: "Radius",
         });
         groupTarget.add(BlurSigma);
 
