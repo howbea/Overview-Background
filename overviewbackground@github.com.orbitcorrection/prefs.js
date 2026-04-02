@@ -22,7 +22,7 @@ export default class OBPreferences extends ExtensionPreferences {
         const BlurBrightnessAdjustment = new Gtk.Adjustment({
             value: settings.get_int("blur-brightness"),
             lower: 0,
-            upper: 20,
+            upper: 25,
             step_increment: 1,
         });
 
@@ -43,34 +43,34 @@ export default class OBPreferences extends ExtensionPreferences {
         BlurBrightness.add_suffix(BlurBrightnessSpinButton);
         BlurBrightness.activatable_widget = BlurBrightnessSpinButton;
 
-        const BlurSigma = new Adw.ActionRow({
+        const BlurRadius = new Adw.ActionRow({
             title: "Radius",
         });
-        groupTarget.add(BlurSigma);
+        groupTarget.add(BlurRadius);
 
-        const BlurSigmaAdjustment = new Gtk.Adjustment({
-            value: settings.get_int("blur-sigma"),
+        const BlurRadiusAdjustment = new Gtk.Adjustment({
+            value: settings.get_int("blur-radius"),
             lower: 0,
-            upper: 20,
+            upper: 25,
             step_increment: 1,
         });
 
-        const BlurSigmaSpinButton = new Gtk.SpinButton({
-            adjustment: BlurSigmaAdjustment,
+        const BlurRadiusSpinButton = new Gtk.SpinButton({
+            adjustment: BlurRadiusAdjustment,
             numeric: true,
             valign: Gtk.Align.CENTER,
             halign: Gtk.Align.END,
         });
 
         settings.bind(
-            "blur-sigma",
-            BlurSigmaSpinButton.get_adjustment(),
+            "blur-radius",
+            BlurRadiusSpinButton.get_adjustment(),
             "value",
             Gio.SettingsBindFlags.DEFAULT
         );
 
-        BlurSigma.add_suffix(BlurSigmaSpinButton);
-        BlurSigma.activatable_widget = BlurSigmaSpinButton;
+        BlurRadius.add_suffix(BlurRadiusSpinButton);
+        BlurRadius.activatable_widget = BlurRadiusSpinButton;
 
         window.add(page);
     }
