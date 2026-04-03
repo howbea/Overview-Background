@@ -31,7 +31,7 @@ export default class OvervievBackgroudExtension extends Extension {
    
         let monitor = Main.layoutManager.monitors[monitorIndex];
         let widget = new St.Widget({
-            style_class: 'ov-background',
+            style_class: 'overview-background',
             x: monitor.x,
             y: monitor.y,
             width: monitor.width,
@@ -44,70 +44,91 @@ export default class OvervievBackgroudExtension extends Extension {
             monitorIndex,
             controlPosition: false,
         });
-
+        
         this._bgManagers.push(bgManager);
-
+        
         this._backgroundGroup.add_child(widget);
     }
 
-    _updateBackgroundEffects() {
-        const BLUR_BRIGHTNESS = this._settings.get_int('blur-brightness')* 0.05;
-        const BLUR_SIGMA = this._settings.get_int('blur-sigma')* 5;
+    _updateBackgroundEffects() {        
+        const blur = this._settings.get_int('blur-radius');
+
+        const BLUR_BRIGHTNESS = this._settings.get_int('blur-brightness')* 0.04;
+        const BLUR_RADIUS =
+            blur === 1 ? blur :
+            blur === 2 ? blur * 3 :
+            blur === 3 ? blur * 3 :
+            blur === 4 ? blur * 3 :
+            blur * 4;
+            
         const themeContext = St.ThemeContext.get_for_stage(global.stage);
-        this._signalnotifyscalefactor = themeContext.connectObject('notify::scale-factor',
-            () => this._updateBackgroundEffects(), this);
+        
         for (const widget of this._backgroundGroup) {
             const effect = widget.get_effect('blur');
 
             if (effect) {
                 effect.set({
                     brightness: BLUR_BRIGHTNESS,
-                    radius: BLUR_SIGMA / themeContext.scale_factor,
+                    radius: BLUR_RADIUS * themeContext.scale_factor,
                 });
             }
         }
     }
 
-    _updateBackgrounds() {
+    _updateBackgrounds() {        
         for (let i = 0; i < this._bgManagers.length; i++)
-            this._bgManagers[i].destroy();
-
+            this._bgManagers[i].destroy();    
+        
         this._bgManagers = [];
-        this._backgroundGroup.destroy_all_children();        
+        
+        if (!this._backgroundGroup)
+            this._backgroundGroup = new Clutter.Actor();
+            
+        this._backgroundGroup.destroy_all_children();
 
         for (let i = 0; i < Main.layoutManager.monitors.length; i++)
             this._createBackground(i);
-        this._updateBackgroundEffects();
-        this._signalmonitorchanged = Main.layoutManager.connectObject('monitors-changed',
-            this._updateBackgrounds.bind(this), this);
+        this._updateBackgroundEffects();        
     }
 
     enable() {
         this._settings = this.getSettings();
+        
         this._backgroundGroup = new Clutter.Actor();
-        this._bgManagers = [];
+        
+        this._bgManagers = [];    
+        
+        const themeContext = St.ThemeContext.get_for_stage(global.stage);
+        this._signalnotifyscalefactor = themeContext.connectObject('notify::scale-factor',
+            () => this._updateBackgroundEffects(), this);
+        
         this._updateBackgrounds();
-        this._settingsChangeId = this._settings.connect("changed", () => {
-            this._updateBackgrounds();
-            });
-
+        
         Main.layoutManager.overviewGroup.insert_child_at_index(this._backgroundGroup, 0);
+        
+        this._signalmonitorchanged = Main.layoutManager.connectObject('monitors-changed',
+            this._updateBackgrounds.bind(this), this);
+            
+        this._settingsChangeId = this._settings.connectObject("changed",
+            () => this._updateBackgroundEffects(), this);
     }
 
     disable() {
         if (this._settingsChangeId)
-        this._settings.disconnect(this._settingsChangeId);
+        this._settings.disconnectObject(this._settingsChangeId);
         this._settingsChangeId = null;
         this._settings = null;
         if (this._signalnotifyscalefactor) { 
             themeContext.disconnectObject(this._signalnotifyscalefactor);
             this._signalnotifyscalefactor = null;
         }
-         if (this._signalmonitorchanged) {
+        if (this._signalmonitorchanged) {
             Main.layoutManager.disconnectObject(this._signalmonitorchanged);
             this._signalmonitorchanged = null;
         }
-        this._backgroundGroup.destroy();
-        this._backgroundGroup = null;       
+        if(this._backgroundGroup) {
+            this._backgroundGroup.destroy();
+            this._backgroundGroup = null;
+        }
     }
 }
