@@ -2,10 +2,10 @@
 <schemalist>
   <schema id="org.gnome.shell.extensions.ob" path="/org/gnome/shell/extensions/ob/">
     <key name="blur-brightness" type="i">
-      <default>13</default>
+      <default>16</default>
     </key>
-    <key name="blur-sigma" type="i">
-      <default>9</default>
+    <key name="blur-radius" type="i">
+      <default>22</default>
     </key>
   </schema>
 </schemalist>
