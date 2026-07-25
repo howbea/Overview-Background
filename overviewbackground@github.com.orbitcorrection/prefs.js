@@ -1,4 +1,4 @@
-import { ExtensionPreferences } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
+import { ExtensionPreferences, gettext as _ } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 import Adw from "gi://Adw";
 import Gio from "gi://Gio";
 import Gtk from "gi://Gtk";
@@ -9,13 +9,13 @@ export default class OBPreferences extends ExtensionPreferences {
     
         const page = new Adw.PreferencesPage();
         const groupTarget = new Adw.PreferencesGroup({
-            title: "Blur Intensity",
-            description: "Adjusting brightness and radius",
+            title: _("Blur Intensity"),
+            description: _("Adjusting brightness and radius"),
         });
         page.add(groupTarget);
         
         const BlurBrightness = new Adw.ActionRow({
-            title: "Brightness",
+            title: _("Brightness"),
         });
         groupTarget.add(BlurBrightness);
 
@@ -44,7 +44,7 @@ export default class OBPreferences extends ExtensionPreferences {
         BlurBrightness.activatable_widget = BlurBrightnessSpinButton;
 
         const BlurRadius = new Adw.ActionRow({
-            title: "Radius",
+            title: _("Radius"),
         });
         groupTarget.add(BlurRadius);
 
